@@ -150,6 +150,7 @@ class ThirdWindow(QWidget):
         self.setWindowTitle("Game - Rock, Paper and Scissors")
         self.labels()
         self.buttons()
+        # self.userChoice = 0
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.computerChoice)
@@ -262,14 +263,13 @@ class ThirdWindow(QWidget):
             self.label_computer.setPixmap(QtGui.QPixmap('images/scissors-label.png'))
             self.label_computer.setScaledContents(True)
 
-        # self.checkWin()
+        self.checkWin()
 
     def checkWin(self):
-
         self.pontoPC = 0
         self.pontoUser = 0
 
-        if self.pc == self.userChoice :
+        if self.pc == self.userChoice:
             self.pontoPC += 0
             self.pontoUser += 0
         elif (self.pc == 1 and self.userChoice == 2) or (self.pc == 2 and self.userChoice == 3) or (self.pc == 3 and self.userChoice == 1):
@@ -300,3 +300,4 @@ app = QApplication(sys.argv)
 mainWin = MainWindow()
 mainWin.show()
 sys.exit(app.exec_())
+
