@@ -25,7 +25,7 @@ class MainWindow(QWidget):
     def Button(self):
         button = QPushButton("ENTER", self)
         button.setGeometry(170, 270, 20, 40)
-        button.clicked.connect(self.openSecond)
+        button.clicked.connect(self.read)
         button.setStyleSheet("border-radius: 30px; "
                              "background-color: #40128B; "
                              "color: #ffffff;"
@@ -74,17 +74,26 @@ class MainWindow(QWidget):
     def read(self):
         self.texto = self.caixa_texto.text()
         self.caixa_texto.setText("")
+
         if not self.texto.isalpha():
-            QMessageBox.warning(self, "Erro", "Only letter. Please try again!")
+            QMessageBox.warning(self, "Erro", "Just letters. Please, try again!")
+            self.show()
+        elif not re.match("^[A-Za-zÀ-ÿ\s]+$", self.texto):
+            QMessageBox.warning(self, "Erro", "Just letters. Please, try again!")
+            self.show()
+        elif not self.texto.strip():
+            QMessageBox.warning(self, "Erro", "Just letters. Please, try again!")
+            self.show()
         else:
             print('tudo certo')
+            self.openSecond()
 
     def openSecond(self):
-        self.close()
-        self.second = SecondWindow(self.caixa_texto.text())
+        self.second = SecondWindow(self.texto)
         if self.second.nome:
-            self.second.show()
             self.caixa_texto.clear()
+            self.second.show()
+            self.hide()
 
 
 class SecondWindow(QWidget):
@@ -150,15 +159,15 @@ class ThirdWindow(QWidget):
         self.setWindowTitle("Game - Rock, Paper and Scissors")
         self.labels()
         self.buttons()
-        # self.userChoice = 0
+        self.userChoice = 0
+        self.pontoPC = 0
+        self.pontoUser = 0
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.computerChoice)
 
-        self.timer_10 = QTimer()
-        self.timer_10 .timeout.connect(self.updateTimer)
         self.remaining_time = 20
-        self.timer_10 .start(1000)
+        self.timer_10 = None
         self.label_timer = QLabel(f"Time: {self.remaining_time}", self)
         self.label_timer.setFont(QFont('Arial', 12))
         self.label_timer.setStyleSheet("font-weight: bold;")
@@ -266,12 +275,9 @@ class ThirdWindow(QWidget):
         self.checkWin()
 
     def checkWin(self):
-        self.pontoPC = 0
-        self.pontoUser = 0
 
         if self.pc == self.userChoice:
-            self.pontoPC += 0
-            self.pontoUser += 0
+            pass
         elif (self.pc == 1 and self.userChoice == 2) or (self.pc == 2 and self.userChoice == 3) or (self.pc == 3 and self.userChoice == 1):
             self.pontoPC += 1
         elif (self.pc == 1 and self.userChoice == 3) or (self.pc == 2 and self.userChoice == 1) or (self.pc == 3 and self.userChoice == 2):
@@ -281,8 +287,12 @@ class ThirdWindow(QWidget):
         self.computer_score_label.setText(f"Computer Score: {self.pontoPC}")
 
     def startTimer(self):
+        self.updateTimer()
         self.timer.start(1000)
-
+        if self.timer_10 is None:
+            self.timer_10 = QTimer()
+            self.timer_10.timeout.connect(self.updateTimer)
+        self.timer_10.start(1000)
     def updateTimer(self):
         self.remaining_time -= 1
         self.label_timer.setText(f"Time: {self.remaining_time}")
