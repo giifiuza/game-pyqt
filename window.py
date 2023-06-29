@@ -166,7 +166,7 @@ class ThirdWindow(QWidget):
         self.timer = QTimer()
         self.timer.timeout.connect(self.computerChoice)
 
-        self.remaining_time = 20
+        self.remaining_time = 5
         self.timer_10 = None
         self.label_timer = QLabel(f"Time: {self.remaining_time}", self)
         self.label_timer.setFont(QFont('Arial', 12))
@@ -258,7 +258,7 @@ class ThirdWindow(QWidget):
 
     def computerChoice(self):
         lista = ['papel', 'pedra', 'tesoura']
-        self.choicePC= choice(lista)
+        self.choicePC = choice(lista)
         if self.choicePC == 'papel':
             self.pc = 1
             self.label_computer.setPixmap(QtGui.QPixmap('images/paper-label.png'))
@@ -302,63 +302,14 @@ class ThirdWindow(QWidget):
             self.btn_rock.setEnabled(False)
             self.btn_scissors.setEnabled(False)
             self.timer.stop()
-            sleep(2)
-
-            self.openLast()
-            # QMessageBox.about(self, 'Ending Game', "Gonna close!")
-            # self.close()
-
-    def openLast(self):
+            sleep(1)
+            QMessageBox.about(self, 'Ending Game', "Gonna close!")
             self.close()
-            self.last = LastWindow()
-            self.last.show()
 
-class LastWindow(QWidget):
-    def __init__(self, parent=None):
-        super(LastWindow, self).__init__(parent)
-        self.setGeometry(100, 100, 550, 650)
-        self.setStyleSheet("background-color: #cedeff;")
-        self.setWindowTitle("Play again")
-        self.labels()
-        self.Button()
-
-    def labels(self):
-        self.label1 = QLabel(self)
-        self.label1.setText("Play again ?")
-        self.label1.move(125, 40)
-        self.label1.setStyleSheet('QLabel {font:bold;'
-                                  'font-family: Arial;'
-                                  'font-size:22px;'
-                                  'color:"#40128B"}')
-        self.label1.resize(250, 30)
-        
-    def Button(self):
-            self.button = QPushButton("NO", self)
-            self.button.setGeometry(100, 120, 20, 40)
-            self.button.clicked.connect(self.close)
-            self.button.setStyleSheet("border-radius: 30px; "
-                                "background-color: #9B111E; "
-                                "color: #ffffff;"
-                                "font-weight: bold;"
-                                "font-family: Arial;"
-                                "font-size: 20px")
-            self.button.resize(120, 60)
-
-            self.btn_yes = QPushButton("YES", self)
-            self.btn_yes.setGeometry(150, 120, 20, 40)
-            self.btn_yes.clicked.connect(self.close)
-            self.btn_yes.setStyleSheet("border-radius: 30px; "
-                                "background-color: #40128B; "
-                                "color: #ffffff;"
-                                "font-weight: bold;"
-                                "font-family: Arial;"
-                                "font-size: 20px")
-            self.btn_yes.resize(120, 60)
-
-app = QApplication(sys.argv)
-mainWin = MainWindow()
-mainWin.show()
-sys.exit(app.exec_())
-
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    mainWin = MainWindow()
+    mainWin.show()
+    sys.exit(app.exec_())
 
 
