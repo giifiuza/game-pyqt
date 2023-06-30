@@ -306,10 +306,15 @@ class ThirdWindow(QWidget):
             QMessageBox.about(self, 'Ending Game', "Gonna close!")
             self.close()
 
-if __name__ == '__main__':
+
+def main():
     app = QApplication(sys.argv)
     mainWin = MainWindow()
     mainWin.show()
     sys.exit(app.exec_())
+
+        
+if __name__ == '__main__':
+    main()
 
 
